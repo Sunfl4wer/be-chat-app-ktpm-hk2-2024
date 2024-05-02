@@ -15,12 +15,16 @@ public class Media {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String filename;
+    @Column(name = "content_type")
     private String contentType;
+    @Column(name = "file_path")
     private String filePath; // Store the storage path
 
     @CreationTimestamp
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

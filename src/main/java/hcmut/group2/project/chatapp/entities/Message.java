@@ -2,7 +2,10 @@ package hcmut.group2.project.chatapp.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -15,18 +18,18 @@ import java.util.Date;
 public class Message {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private String id;
+    private Long id;
 
     @Column(name = "conversation_id", nullable = false)
-    private String conversationId;
+    private Long conversationId;
 
     @Column(name = "text_body", nullable = false)
     private String textBody;
 
     @Column(name = "sender_id", nullable = false)
-    private String senderId;
+    private Long senderId;
 
     @Column(name = "media_id")
     private Long mediaId;
@@ -38,9 +41,16 @@ public class Message {
     private MessageStatus status;
 
     @Column(name = "send_time", nullable = false)
-    private Date sendTime;
+    private LocalDateTime sendTime;
 
     @Column(name = "modify_time", nullable = false)
-    private Date modifyTime;
+    private LocalDateTime modifyTime;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
 

@@ -30,8 +30,6 @@ public class MessageService {
     }
 
     public Page<Message> getMessages(Long conversationId, Pageable pageable) {
-        final Page<Message> messages = messagesRepository.getMessages(conversationId, pageable);
-        return conversationId.map(messagesRepository::findByConversationId).orElse(new ArrayList<>());
+        return messagesRepository.findByConversationIdOrderByCreatedAt(conversationId, pageable);
     }
-
 }

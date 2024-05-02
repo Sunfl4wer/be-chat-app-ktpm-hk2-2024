@@ -2,6 +2,7 @@ package hcmut.group2.project.chatapp.controllers;
 
 import hcmut.group2.project.chatapp.controllers.request.CreateConversationRequest;
 import hcmut.group2.project.chatapp.controllers.request.SendMessageRequest;
+import hcmut.group2.project.chatapp.dto.ConversationEventDto;
 import hcmut.group2.project.chatapp.entities.Conversation;
 import hcmut.group2.project.chatapp.entities.Message;
 import hcmut.group2.project.chatapp.entities.MsgNotification;
@@ -13,10 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,23 +27,21 @@ public class ConversationsController {
 
     @Autowired
     private final ConversationService conversationService;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
     
     @Autowired
     private final MessageService messageService;
 
-    @MessageMapping("/messages")
+    @PostMapping("/messages")
     public void recordMessage(@Payload SendMessageRequest message) {
         Message savedMessage = messageService.record(message);
-        String recipientId = message.getRecipientId();
-        messagingTemplate.convertAndSendToUser(
-                recipientId,
-                "/queue/messages",
-                new MsgNotification(
-                        savedMessage.getId(),
-                        savedMessage.getSenderId(),
-                        savedMessage.getTextBody()
-                )
-        );
+        String destination = "/topic/conversations/" + message.getConversationId();
+        simpMessagingTemplate.convertAndSend(destination, ConversationEventDto.builder()
+                .type("new_message")
+                .data(savedMessage)
+                .build());
     }
 
     @PostMapping("/conversations")
@@ -55,31 +51,17 @@ public class ConversationsController {
     }
 
     @GetMapping("/conversations")
-    public ResponseEntity<Page<Conversation>> getConversations(@RequestParam(name = "userId") Long userId,
-                                                              Pageable pageable) {
-        if (pageable == null) {
-            pageable = PageRequest.of(0, 10);
-        }
-        final Page<Conversation> conversations = conversationService.getConversation(userId, pageable);
+    public ResponseEntity<List<Conversation>> getConversations(@RequestParam(name = "userId") Long userId) {
+        final List<Conversation> conversations = conversationService.getConversations(userId);
         return ResponseEntity.ok(conversations);
     }
 
     @GetMapping("/conversation/{conversationId}/messages")
-    public ResponseEntity<List<Message>> findConversationMessage(@PathVariable Long conversationId) {
-        return ResponseEntity.ok(messageService.findConversationMessages(senderId, recipientId));
+    public ResponseEntity<Page<Message>> findConversationMessage(@PathVariable Long conversationId,
+                                                                 Pageable pageable) {
+        if (pageable == null) {
+            pageable = PageRequest.of(0, 10);
+        }
+        return ResponseEntity.ok(messageService.getMessages(conversationId, pageable));
     }
-
-    @MessageMapping("/conversations.sendMessage")
-    @SendTo("/topic/public")
-    public Message sendMessage(@Payload Message message) {
-        return message;
-    }
-
-    @MessageMapping("/conversations.addUser")
-    @SendTo("/topic/public")
-    public Message addUser(@Payload Message message, SimpMessageHeaderAccessor headerAccessor) {
-        headerAccessor.getSessionAttributes().put("username", message.getSenderId());
-        return message;
-    }
-
 }

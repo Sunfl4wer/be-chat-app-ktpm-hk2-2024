@@ -12,9 +12,9 @@ import java.util.Date;
 @Getter
 @Setter
 public class SendMessageRequest {
-    private String conversationId;
+    private Long conversationId;
     private String textBody;
-    private String senderId;
+    private Long senderId;
     private Long mediaId;
     private Date sendTime;
 }
