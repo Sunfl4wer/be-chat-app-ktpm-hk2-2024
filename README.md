@@ -5,10 +5,11 @@ Backend code for a simple chat app
 `http://localhost:8080/chatapp/swagger-ui/index.html#/`
 
 # UserManagement service (localhost:8099)
+Backend code for UserManagement service.
 ![image](https://github.com/Sunfl4wer/be-chat-app-ktpm-hk2-2024/assets/129239083/4a5ad888-7ceb-4e51-891a-2b1cb57238d9)
 
-Backend code for UserManagement service.
-# Prerequisites: Setup system environment variables - - DEVDB-URL, DEVDB-USERNAME, DEVDB-PASSWORD [Notion Link](https://www.notion.so/Development-Environment-423deb424f8944ce820da5a931132039#001129668dd242b68977a64b5949731c)
+Prerequisites: Setup system environment variables - - DEVDB-URL, DEVDB-USERNAME, DEVDB-PASSWORD [Notion Link](https://www.notion.so/Development-Environment-423deb424f8944ce820da5a931132039#001129668dd242b68977a64b5949731c)
+
 API Documentation Swagger UI: Please use this endpoint - "http://localhost:8099/swagger-ui/index.html#/"
 
 API Endpoints:
