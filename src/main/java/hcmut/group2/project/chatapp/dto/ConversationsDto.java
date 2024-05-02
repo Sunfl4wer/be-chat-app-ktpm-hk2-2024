@@ -10,10 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConversationsDto {
-
     private String senderId;
     private String recipientId;
     private String messageId;
     private String conversationId;
-
 }

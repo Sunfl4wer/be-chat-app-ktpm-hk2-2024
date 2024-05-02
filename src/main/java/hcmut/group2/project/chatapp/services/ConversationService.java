@@ -1,7 +1,8 @@
 package hcmut.group2.project.chatapp.services;
 
-import hcmut.group2.project.chatapp.entities.Conversations;
-import hcmut.group2.project.chatapp.repositories.ConversationsRepository;
+import com.amazonaws.services.globalaccelerator.model.CreateAcceleratorRequest;
+import hcmut.group2.project.chatapp.entities.Conversation;
+import hcmut.group2.project.chatapp.repositories.ConversationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,14 +10,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ConversationsService {
+public class ConversationService {
 
-    private final ConversationsRepository conversationsRepository;
+    private final ConversationRepository conversationRepository;
 
-    public Optional<String> getConversationId(String senderId, String recipientId, boolean createIfNotExists) {
-        return conversationsRepository
+    public Conversation createConversation(CreateAcceleratorRequest request) {
+        return conversationRepository
                 .findBySenderIdAndRecipientId(senderId, recipientId)
-                .map(Conversations::getConversationId)
+                .map(Conversation::getConversationId)
                 .or(() -> {
                     if (createIfNotExists) {
                         String conversationId = createPersonalChat(senderId, recipientId);
@@ -33,8 +34,8 @@ public class ConversationsService {
         Conversations senderRecipient = new Conversations(senderId, recipientId, conversationId);
         Conversations recipientSender = new Conversations(recipientId, senderId, conversationId);
 
-        conversationsRepository.save(senderRecipient);
-        conversationsRepository.save(recipientSender);
+        conversationRepository.save(senderRecipient);
+        conversationRepository.save(recipientSender);
 
         return conversationId;
     }

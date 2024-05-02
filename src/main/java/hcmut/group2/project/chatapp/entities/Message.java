@@ -11,7 +11,8 @@ import java.util.Date;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Messages {
+@Builder
+public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,14 +28,8 @@ public class Messages {
     @Column(name = "sender_id", nullable = false)
     private String senderId;
 
-    @Column(name = "recipient_id", nullable = false)
-    private String recipientId;
-
-    @Column(name = "image_url")
-    private String imageUrl;
-
-    @Column(name = "video_url")
-    private String videoUrl;
+    @Column(name = "media_id")
+    private Long mediaId;
 
     @Column(name = "edited", nullable = false)
     private Boolean edited;
