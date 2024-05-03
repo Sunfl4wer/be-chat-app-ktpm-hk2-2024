@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -30,6 +31,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(FriendshipDuplicatedException.class)
     public ResponseEntity<String> handleFriendshipDuplicated(FriendshipDuplicatedException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(IncorrectCredentialException.class)
+    public ResponseEntity<String> handleIncorrectCredentialException(IncorrectCredentialException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
     // Generic handler for all other exceptions

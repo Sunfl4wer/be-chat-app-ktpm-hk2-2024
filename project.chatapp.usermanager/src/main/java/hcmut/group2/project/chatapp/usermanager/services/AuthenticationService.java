@@ -10,12 +10,14 @@ import hcmut.group2.project.chatapp.usermanager.entities.RefreshToken;
 import hcmut.group2.project.chatapp.usermanager.enums.UserActivity;
 import hcmut.group2.project.chatapp.usermanager.enums.UserRole;
 import hcmut.group2.project.chatapp.usermanager.enums.UserStatus;
+import hcmut.group2.project.chatapp.usermanager.exceptions.IncorrectCredentialException;
 import hcmut.group2.project.chatapp.usermanager.exceptions.UserDuplicatedException;
 import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -71,13 +73,17 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticationResponse authenticate(ChatUserLoginDto userLoginDto) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        userLoginDto.getPhoneNumber(),
-                        userLoginDto.getPassword()
-                )
-        );
+    public AuthenticationResponse authenticate(ChatUserLoginDto userLoginDto) throws IncorrectCredentialException {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userLoginDto.getPhoneNumber(),
+                            userLoginDto.getPassword()
+                    )
+                );
+        } catch (AuthenticationException ex) {
+            throw new IncorrectCredentialException("Wrong phone number or password.");
+        }
 
         ChatUser user = chatUserRepo.findByPhoneNumber(userLoginDto.getPhoneNumber()).orElseThrow();
         String jwt = jwtService.generateToken(user);
