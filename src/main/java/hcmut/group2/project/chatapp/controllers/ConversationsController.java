@@ -35,7 +35,7 @@ public class ConversationsController {
     @Autowired
     private final MessageService messageService;
 
-    @MessageMapping("/send-message")
+    @MessageMapping("/sendMessage")
     public void recordMessage(@Payload SendMessageRequest message) {
         Message savedMessage = messageService.record(message);
         String destination = "/topic/conversations/" + message.getConversationId();
