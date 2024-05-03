@@ -16,18 +16,18 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(
-                        request -> request
-                                .requestMatchers("/**").permitAll()
-                                .anyRequest().anonymous()
-                )
-                .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .csrf(AbstractHttpConfigurer::disable);
+   @Bean
+        SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+            http
+                    .authorizeHttpRequests(
+                            request -> request
+                                    .requestMatchers("/**").permitAll()
+                                    .anyRequest().anonymous()
+                    )
+                    .formLogin(Customizer.withDefaults())
+                    .httpBasic(Customizer.withDefaults())
+                    .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                    .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
