@@ -1,30 +1,29 @@
 package hcmut.group2.project.chatapp.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Table(name = "media")
 @Entity
-@Data
-public class Media {
+@Table(name = "participants")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String filename;
-    @Column(name = "content_type")
-    private String contentType;
-    @Column(name = "file_path")
-    private String filePath; // Store the storage path
-
+    private Long userId;
+    private Long conversationId;
     @CreationTimestamp
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
-
     @UpdateTimestamp
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

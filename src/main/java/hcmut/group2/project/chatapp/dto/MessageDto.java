@@ -12,18 +12,15 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessagesDto {
-
+public class MessageDto {
     private String id;
     private String conversationId;
     private String textBody; // content
     private String senderId;
     private String recipientId;
-    private String imageUrl;
-    private String videoUrl;
+    private Long mediaId ;
     private Boolean edited;
     private MessageStatus status;
     private Date sendTime;
     private Date modifyTime;
-
 }
