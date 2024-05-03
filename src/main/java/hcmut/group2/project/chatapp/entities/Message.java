@@ -43,7 +43,7 @@ public class Message {
     @Column(name = "send_time", nullable = false)
     private LocalDateTime sendTime;
 
-    @Column(name = "modify_time", nullable = false)
+    @Column(name = "modify_time")
     private LocalDateTime modifyTime;
 
     @CreationTimestamp

@@ -9,7 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -25,8 +28,16 @@ public class MessageService {
                 .mediaId(message.getMediaId())
                 .textBody(message.getTextBody())
                 .senderId(message.getSenderId())
+                .sendTime(convertToLocalDateTime(message.getSendTime()))
+                .edited(false)
                 .build();
         return messagesRepository.save(msg);
+    }
+
+    public LocalDateTime convertToLocalDateTime(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 
     public Page<Message> getMessages(Long conversationId, Pageable pageable) {
