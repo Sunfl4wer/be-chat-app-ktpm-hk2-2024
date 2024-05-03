@@ -12,6 +12,12 @@ Prerequisites: Setup system environment variables - - DEVDB-URL, DEVDB-USERNAME,
 
 API Documentation Swagger UI: Please use this endpoint - "http://localhost:8099/swagger-ui/index.html#/"
 
+Test User:
+{
+    "phoneNumber":"01234567895",
+    "password":"Test_regist#123"
+}
+
 API Endpoints:
 - auth-controller (no authorization needed):
   + POST /auth/register: register a user account with role = USER. Requires unique phoneNumber and username.
