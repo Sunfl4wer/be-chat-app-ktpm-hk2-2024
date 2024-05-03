@@ -5,7 +5,6 @@ import hcmut.group2.project.chatapp.controllers.request.SendMessageRequest;
 import hcmut.group2.project.chatapp.dto.ConversationEventDto;
 import hcmut.group2.project.chatapp.entities.Conversation;
 import hcmut.group2.project.chatapp.entities.Message;
-import hcmut.group2.project.chatapp.entities.MsgNotification;
 import hcmut.group2.project.chatapp.services.ConversationService;
 import hcmut.group2.project.chatapp.services.MessageService;
 import lombok.RequiredArgsConstructor;
