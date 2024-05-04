@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
-public class ChatUserController {
+public class ChatUserController implements JWTAuthController {
 	@Autowired
 	private ChatUserService userService;
 

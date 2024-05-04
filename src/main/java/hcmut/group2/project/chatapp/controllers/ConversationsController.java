@@ -8,6 +8,8 @@ import hcmut.group2.project.chatapp.entities.Conversation;
 import hcmut.group2.project.chatapp.entities.Message;
 import hcmut.group2.project.chatapp.services.ConversationService;
 import hcmut.group2.project.chatapp.services.MessageService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,7 +25,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-public class ConversationsController {
+public class ConversationsController implements JWTAuthController {
 
     @Autowired
     private final ConversationService conversationService;

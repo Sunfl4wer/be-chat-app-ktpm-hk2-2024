@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/friends")
-public class FriendshipController {
+public class FriendshipController implements JWTAuthController {
 	@Autowired
 	private FriendshipService friendService;
 

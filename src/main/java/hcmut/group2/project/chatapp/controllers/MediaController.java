@@ -24,7 +24,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/media")
 @Slf4j
-public class MediaController {
+public class MediaController implements JWTAuthController {
     @Autowired
     private MediaService mediaService;
     private static final Logger logger = LoggerFactory.getLogger(MediaController.class);
