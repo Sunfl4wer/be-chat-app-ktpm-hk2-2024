@@ -1,4 +1,4 @@
-package hcmut.group2.project.chatapp.configuration;
+package hcmut.group2.project.chatapp.usermanager.configurations;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
