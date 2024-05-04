@@ -1,6 +1,7 @@
 package hcmut.group2.project.chatapp.controllers;
 
 import hcmut.group2.project.chatapp.controllers.request.CreateConversationRequest;
+import hcmut.group2.project.chatapp.controllers.request.CreateConversationResponse;
 import hcmut.group2.project.chatapp.controllers.request.SendMessageRequest;
 import hcmut.group2.project.chatapp.dto.ConversationEventDto;
 import hcmut.group2.project.chatapp.entities.Conversation;
@@ -16,12 +17,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class ConversationsController {
 
@@ -45,9 +45,14 @@ public class ConversationsController {
     }
 
     @PostMapping("/conversations")
-    public ResponseEntity<Conversation> createConversation(@RequestBody CreateConversationRequest request) {
+    public ResponseEntity<CreateConversationResponse> createConversation(@RequestBody CreateConversationRequest request) {
         final Conversation conversation = conversationService.createConversation(request);
-        return ResponseEntity.ok(conversation);
+        return ResponseEntity.ok(CreateConversationResponse.builder()
+                        .creator(request.getCreator())
+                        .id(conversation.getId())
+                        .participants(request.getParticipants())
+                        .name(request.getName())
+                .build());
     }
 
     @GetMapping("/conversations")

@@ -1,9 +1,6 @@
 package hcmut.group2.project.chatapp.controllers.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -11,7 +8,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateConversationRequest {
+@Builder
+public class CreateConversationResponse {
+    private Long id;
     private Long creator;
     private String name;
     private List<Long> participants;
