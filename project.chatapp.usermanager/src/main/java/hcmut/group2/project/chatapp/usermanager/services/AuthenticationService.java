@@ -2,9 +2,9 @@ package hcmut.group2.project.chatapp.usermanager.services;
 
 import hcmut.group2.project.chatapp.usermanager.repositories.ChatUserRepository;
 import hcmut.group2.project.chatapp.usermanager.repositories.RefreshTokenRepository;
+import hcmut.group2.project.chatapp.usermanager.dto.AuthenticationResponseDto;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserLoginDto;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserRegistrationDto;
-import hcmut.group2.project.chatapp.usermanager.entities.AuthenticationResponse;
 import hcmut.group2.project.chatapp.usermanager.entities.ChatUser;
 import hcmut.group2.project.chatapp.usermanager.entities.RefreshToken;
 import hcmut.group2.project.chatapp.usermanager.enums.UserActivity;
@@ -42,7 +42,7 @@ public class AuthenticationService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(ChatUserRegistrationDto userRegistrationDto) throws UserDuplicatedException {
+    public AuthenticationResponseDto register(ChatUserRegistrationDto userRegistrationDto) throws UserDuplicatedException {
         // check if user already exist. if exist than authenticate the user
         if(chatUserRepo.findByPhoneNumber(userRegistrationDto.getPhoneNumber()).isPresent() ||
             chatUserRepo.findByUsername(userRegistrationDto.getUsername()).isPresent()) {
@@ -65,15 +65,15 @@ public class AuthenticationService {
                 .creationDatetime(nowTime)
                 .modificationDatetime(nowTime).build();
 
-        chatUserRepo.save(user);
+        int registerdUserId =  chatUserRepo.save(user).getId();
         String jwt = jwtService.generateToken(user);
         saveUserToken(jwt, user);
 
-        return new AuthenticationResponse(jwt, "User registration was successful");
+        return new AuthenticationResponseDto(jwt, "User registration was successful", Integer.toString(registerdUserId));
 
     }
 
-    public AuthenticationResponse authenticate(ChatUserLoginDto userLoginDto) throws IncorrectCredentialException {
+    public AuthenticationResponseDto authenticate(ChatUserLoginDto userLoginDto) throws IncorrectCredentialException {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -91,7 +91,7 @@ public class AuthenticationService {
         revokeAllTokenByUser(user);
         saveUserToken(jwt, user);
 
-        return new AuthenticationResponse(jwt, "User login was successful");
+        return new AuthenticationResponseDto(jwt, "User login was successful", Integer.toString(user.getId()));
 
     }
 

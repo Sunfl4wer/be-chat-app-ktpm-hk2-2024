@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import hcmut.group2.project.chatapp.usermanager.dto.AuthenticationResponseDto;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserLoginDto;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserRegistrationDto;
-import hcmut.group2.project.chatapp.usermanager.entities.AuthenticationResponse;
 // import hcmut.group2.project.chatapp.usermanager.entities.ChatUser;
 import hcmut.group2.project.chatapp.usermanager.services.AuthenticationService;
 import jakarta.validation.Valid;
@@ -27,7 +27,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody ChatUserRegistrationDto userRegistrationDto) {
+    public ResponseEntity<AuthenticationResponseDto> register(@Valid @RequestBody ChatUserRegistrationDto userRegistrationDto) {
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{phoneNumber}")
@@ -39,7 +39,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody ChatUserLoginDto request) {
+    public ResponseEntity<AuthenticationResponseDto> login(@Valid @RequestBody ChatUserLoginDto request) {
         return ResponseEntity.ok(authService.authenticate(request));
     }
 }
