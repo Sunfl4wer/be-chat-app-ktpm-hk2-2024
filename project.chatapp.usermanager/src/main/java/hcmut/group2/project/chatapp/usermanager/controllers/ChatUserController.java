@@ -3,6 +3,8 @@ package hcmut.group2.project.chatapp.usermanager.controllers;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserDto;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserUpdateDto;
 import hcmut.group2.project.chatapp.usermanager.services.ChatUserService;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +36,7 @@ public class ChatUserController implements JWTAuthController {
     // }
 
     @PutMapping("/{phoneNumber}")
-    public ResponseEntity<ChatUserDto> updateUserByPhoneNumber(@PathVariable String phoneNumber, ChatUserUpdateDto userUpdateDto){
+    public ResponseEntity<ChatUserDto> updateUserByPhoneNumber(@PathVariable String phoneNumber, @Valid @RequestBody ChatUserUpdateDto userUpdateDto){
         return ResponseEntity.ok(userService.updateUserByPhoneNumber(phoneNumber, userUpdateDto));
     }
 
