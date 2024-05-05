@@ -32,6 +32,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleFriendshipDuplicated(FriendshipDuplicatedException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
+    
+    @ExceptionHandler(FriendshipBlockedException.class)
+    public ResponseEntity<String> handleFriendshipBlocked(FriendshipBlockedException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+    }
 
     @ExceptionHandler(IncorrectCredentialException.class)
     public ResponseEntity<String> handleIncorrectCredentialException(IncorrectCredentialException e) {
