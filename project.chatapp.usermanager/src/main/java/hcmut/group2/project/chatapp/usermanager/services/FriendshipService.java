@@ -1,6 +1,7 @@
 package hcmut.group2.project.chatapp.usermanager.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Collections;
 
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,8 @@ import hcmut.group2.project.chatapp.usermanager.entities.ChatUser;
 import hcmut.group2.project.chatapp.usermanager.entities.Friendship;
 import hcmut.group2.project.chatapp.usermanager.entities.keys.FriendshipId;
 import hcmut.group2.project.chatapp.usermanager.enums.FriendshipStatus;
+import hcmut.group2.project.chatapp.usermanager.exceptions.FriendshipBlockedException;
+import hcmut.group2.project.chatapp.usermanager.exceptions.FriendshipDuplicatedException;
 import hcmut.group2.project.chatapp.usermanager.exceptions.FriendshipNotFoundException;
 import hcmut.group2.project.chatapp.usermanager.exceptions.UserNotFoundException;
 import hcmut.group2.project.chatapp.usermanager.repositories.ChatUserRepository;
@@ -34,7 +37,7 @@ public class FriendshipService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public FriendshipDto sendFriendRequest(FriendRequestDto requestDto) throws UserNotFoundException{
+    public FriendshipDto sendFriendRequest(FriendRequestDto requestDto) throws UserNotFoundException, FriendshipDuplicatedException, FriendshipBlockedException{
         ChatUser sendUser = userRepo.findByPhoneNumber(requestDto.getSenderPhoneNumber())
                             .orElseThrow(() -> new UserNotFoundException("Friend Request sender with Phone number " + requestDto.getSenderPhoneNumber() + " not found."));
 
@@ -42,16 +45,26 @@ public class FriendshipService {
                             .orElseThrow(() -> new UserNotFoundException("Friend Request receiver with Phone number " + requestDto.getReceiverPhoneNumber() + " not found."));
 
         Friendship savingRequest = null;
-        Friendship requestFromUser = friendRepo.findById(new FriendshipId(sendUser.getId(), receiveUser.getId())).get();
-        Friendship requestFromOther = friendRepo.findById(new FriendshipId(receiveUser.getId(), sendUser.getId())).get();
+        Optional<Friendship> requestFromUser = friendRepo.findByUserIdAndFriendId(sendUser.getId(), receiveUser.getId());
+        Optional<Friendship> requestFromOther = friendRepo.findByUserIdAndFriendId(receiveUser.getId(), sendUser.getId());
 
-        if (requestFromUser != null && requestFromUser.getStatus() != FriendshipStatus.BLOCKED) {
-            requestFromOther.setStatus(FriendshipStatus.PENDING);
-            savingRequest = requestFromUser;
+        if (requestFromUser.isPresent()) {
+            FriendshipStatus currentStatus = requestFromUser.get().getStatus();
+
+            if (currentStatus == FriendshipStatus.DECLINED) {
+                savingRequest = requestFromUser.get();
+                savingRequest.setStatus(FriendshipStatus.PENDING);
+            }
+            else if (currentStatus == FriendshipStatus.BLOCKED){
+                throw new FriendshipBlockedException("Request cannot be completed. User is blocked from sending friend request.");
+            }
+            else {
+                throw new FriendshipDuplicatedException("Friend request is already existing or accepted.");
+            }
         }
-        else if (requestFromOther != null) {
-            requestFromOther.setStatus(FriendshipStatus.ACCEPTED);
-            savingRequest = requestFromOther;
+        else if (requestFromOther.isPresent()) {
+            savingRequest = requestFromOther.get();
+            savingRequest.setStatus(FriendshipStatus.ACCEPTED);
         }
         else{
             savingRequest = new Friendship(sendUser, receiveUser);
