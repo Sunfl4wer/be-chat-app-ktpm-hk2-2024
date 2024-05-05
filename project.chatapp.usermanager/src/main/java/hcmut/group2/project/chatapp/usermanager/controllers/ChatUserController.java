@@ -2,6 +2,7 @@ package hcmut.group2.project.chatapp.usermanager.controllers;
 
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserDto;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserUpdateDto;
+import hcmut.group2.project.chatapp.usermanager.dto.SearchUserDto;
 import hcmut.group2.project.chatapp.usermanager.services.ChatUserService;
 import jakarta.validation.Valid;
 
@@ -40,9 +41,9 @@ public class ChatUserController implements JWTAuthController {
         return ResponseEntity.ok(userService.updateUserByPhoneNumber(phoneNumber, userUpdateDto));
     }
 
-    @GetMapping
-    public ResponseEntity<List<ChatUserDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+    @GetMapping("/search/{searchString}")
+    public ResponseEntity<List<SearchUserDto>> searchUsers(@PathVariable String searchString) {
+        return ResponseEntity.ok(userService.searchUsers(searchString));
     }
 
     // @GetMapping("/{id}")

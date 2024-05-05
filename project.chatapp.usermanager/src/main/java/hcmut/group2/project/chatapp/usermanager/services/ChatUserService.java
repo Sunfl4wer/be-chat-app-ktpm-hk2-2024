@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserDto;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserRegistrationDto;
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserUpdateDto;
+import hcmut.group2.project.chatapp.usermanager.dto.SearchUserDto;
 import hcmut.group2.project.chatapp.usermanager.entities.ChatUser;
 import hcmut.group2.project.chatapp.usermanager.enums.UserActivity;
 import hcmut.group2.project.chatapp.usermanager.enums.UserRole;
@@ -82,9 +83,9 @@ public class ChatUserService implements UserDetailsService {
         return modelMapper.map(updateUser(existingUser, userUpdateDto), ChatUserDto.class);
     }
 
-    public List<ChatUserDto> getAllUsers(){
-        return userRepository.findAll().stream()
-                    .map(user -> modelMapper.map(user, ChatUserDto.class))
+    public List<SearchUserDto> searchUsers(String searchString) {
+        return userRepository.findByPartialUsernameOrPhoneNumber(searchString).stream()
+                    .map(user -> modelMapper.map(user, SearchUserDto.class))
                     .collect(Collectors.toList());
     }
 
