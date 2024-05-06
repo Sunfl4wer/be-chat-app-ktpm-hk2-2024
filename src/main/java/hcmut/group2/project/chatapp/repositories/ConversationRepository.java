@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,13 +16,14 @@ import java.util.Optional;
 public interface ConversationRepository extends CrudRepository<Conversation, Long> {
 
     @Query(
-            value = "SELECT c.*, MAX(m.created_at) AS latest_message_timestamp" +
-                    "FROM conversations c" +
-                    "JOIN messages m ON c.id = m.conversation_id" +
-                    "WHERE c.user_id = :userId" +
-                    "GROUP BY c.id" +
-                    "ORDER BY latest_message_timestamp DESC",
-            nativeQuery = true
+            value = "select c.* " +
+                    "from conversations c " +
+                    "left join messages m " +
+                    "on m.conversation_id = c.id " +
+                    "where c.id in :conversationIds " +
+                    "group by c.id " +
+                    "order by max(m.created_at) desc"
+            ,nativeQuery = true
     )
-    List<Conversation> findLatestConversationsForUser(Long userId);
+    List<Conversation> findLatestConversationsForUser(@Param("conversationIds") List<Long> conversationIds);
 }

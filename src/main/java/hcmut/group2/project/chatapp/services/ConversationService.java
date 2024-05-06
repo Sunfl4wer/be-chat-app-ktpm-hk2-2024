@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +36,8 @@ public class ConversationService {
     }
 
     public List<Conversation> getConversations(Long userId) {
-       return conversationRepository.findLatestConversationsForUser(userId);
+       List<Long> conversations = participantRepository.findByUserId(userId).stream()
+               .map(Participant::getConversationId).collect(Collectors.toList());
+       return conversationRepository.findLatestConversationsForUser(conversations);
     }
 }

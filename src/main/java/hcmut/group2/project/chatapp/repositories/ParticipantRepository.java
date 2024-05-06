@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface ParticipantRepository extends CrudRepository<Participant, Long> {
     List<Participant> findByConversationIdOrderByCreatedAtDesc(Long conversationId);
+    List<Participant> findByUserId(Long userId);
 }
