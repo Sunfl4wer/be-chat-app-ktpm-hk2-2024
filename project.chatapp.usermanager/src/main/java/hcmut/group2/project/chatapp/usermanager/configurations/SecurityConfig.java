@@ -32,13 +32,13 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
     @Autowired
-    private final ChatUserService userDetailsServiceImp;
+    private ChatUserService userDetailsServiceImp;
 
     @Autowired
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
     
     @Autowired
-    private final CustomLogoutHandler logoutHandler;
+    private CustomLogoutHandler logoutHandler;
 
     public SecurityConfig(ChatUserService userDetailsServiceImp,
                           JwtAuthenticationFilter jwtAuthenticationFilter,
@@ -89,7 +89,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 

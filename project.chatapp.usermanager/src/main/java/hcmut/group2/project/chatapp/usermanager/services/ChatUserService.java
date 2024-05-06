@@ -24,10 +24,8 @@ import hcmut.group2.project.chatapp.usermanager.enums.UserStatus;
 import hcmut.group2.project.chatapp.usermanager.exceptions.UserDuplicatedException;
 import hcmut.group2.project.chatapp.usermanager.exceptions.UserNotFoundException;
 import hcmut.group2.project.chatapp.usermanager.repositories.ChatUserRepository;
-// import lombok.RequiredArgsConstructor;
 
 @Service
-// @RequiredArgsConstructor
 public class ChatUserService implements UserDetailsService {
     @Autowired
     private ChatUserRepository userRepository;

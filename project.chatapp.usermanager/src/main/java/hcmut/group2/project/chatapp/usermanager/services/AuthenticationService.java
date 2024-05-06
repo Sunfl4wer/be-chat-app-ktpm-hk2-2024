@@ -12,7 +12,6 @@ import hcmut.group2.project.chatapp.usermanager.enums.UserRole;
 import hcmut.group2.project.chatapp.usermanager.enums.UserStatus;
 import hcmut.group2.project.chatapp.usermanager.exceptions.IncorrectCredentialException;
 import hcmut.group2.project.chatapp.usermanager.exceptions.UserDuplicatedException;
-import lombok.AllArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +24,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class AuthenticationService {
     @Autowired
     private ChatUserRepository chatUserRepo;
