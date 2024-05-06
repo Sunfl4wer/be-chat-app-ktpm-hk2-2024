@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import hcmut.group2.project.chatapp.usermanager.dto.ChatUserDto;
@@ -32,11 +33,14 @@ public class ChatUserService implements UserDetailsService {
     private ChatUserRepository userRepository;
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     private ChatUser updateUser(ChatUser currentUser, ChatUserUpdateDto userUpdateDto){
         currentUser.setUsername(userUpdateDto.getUsername());
-        currentUser.setPassword(userUpdateDto.getPassword());
+        currentUser.setPassword(passwordEncoder.encode(userUpdateDto.getPassword()));
         currentUser.setEmailAddress(userUpdateDto.getEmailAddress());
         currentUser.setAvatarUrl(userUpdateDto.getAvatarUrl());
         currentUser.setFirstName(userUpdateDto.getFirstName());
@@ -52,7 +56,7 @@ public class ChatUserService implements UserDetailsService {
                 LocalDateTime nowTime = LocalDateTime.now();
         
                 ChatUser userEntity = ChatUser.builder().username(userRegistrationDto.getUsername())
-                .password(userRegistrationDto.getPassword())
+                .password(passwordEncoder.encode(userRegistrationDto.getPassword()))
                 .role(UserRole.USER)
                 .status(UserStatus.ACTIVE)
                 .activity(UserActivity.OFFLINE)
