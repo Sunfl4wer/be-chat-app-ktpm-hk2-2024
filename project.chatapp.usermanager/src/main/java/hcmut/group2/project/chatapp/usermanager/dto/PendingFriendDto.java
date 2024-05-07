@@ -5,6 +5,9 @@ import lombok.*;
 @Setter @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FriendPhoneNumberDto {
+public class PendingFriendDto {
+    private Integer id;
+    private String username;
     private String phoneNumber;
+    private String avatarUrl;
 }

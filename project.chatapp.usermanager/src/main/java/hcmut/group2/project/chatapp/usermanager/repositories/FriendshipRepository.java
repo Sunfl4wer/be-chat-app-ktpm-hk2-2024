@@ -14,11 +14,8 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Friendsh
     @Query("SELECT f FROM Friendship f WHERE f.user.id = :userId OR f.friend.id = :userId")
     List<Friendship> findAllByUserId(Integer userId);
 
-    @Query("SELECT f FROM Friendship f WHERE (f.user.id = :userId OR f.friend.id = :userId) AND f.status = :status")
-    List<Friendship> findAllByUserIdAndStatus(Integer userId, FriendshipStatus status);
-
-    @Query("SELECT f FROM Friendship f WHERE f.friend.id = :friendId AND f.status = :status")
-    List<Friendship> findAllByFriendIdAndStatus(Integer friendId, FriendshipStatus status);
+    @Query("SELECT f FROM Friendship f WHERE (f.user.id = :userId OR f.friend.id = :userId) AND f.status = :statusName")
+    List<Friendship> findAllByUserIdAndStatus(Integer userId, FriendshipStatus statusName);
     
     @Query("SELECT f FROM Friendship f WHERE f.user.id = :userId AND f.friend.id = :friendId")
     Optional<Friendship> findByUserIdAndFriendId(Integer userId, Integer friendId);

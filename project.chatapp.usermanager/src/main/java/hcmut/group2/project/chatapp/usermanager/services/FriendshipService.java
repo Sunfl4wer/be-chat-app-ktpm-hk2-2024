@@ -2,17 +2,18 @@ package hcmut.group2.project.chatapp.usermanager.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import hcmut.group2.project.chatapp.usermanager.dto.FriendPhoneNumberDto;
+import hcmut.group2.project.chatapp.usermanager.dto.FriendDto;
 import hcmut.group2.project.chatapp.usermanager.dto.FriendRequestDto;
 import hcmut.group2.project.chatapp.usermanager.dto.FriendRequestUpdateDto;
 import hcmut.group2.project.chatapp.usermanager.dto.FriendshipDto;
-import hcmut.group2.project.chatapp.usermanager.dto.PendingPhoneNumberDto;
+import hcmut.group2.project.chatapp.usermanager.dto.PendingFriendDto;
 import hcmut.group2.project.chatapp.usermanager.entities.ChatUser;
 import hcmut.group2.project.chatapp.usermanager.entities.Friendship;
 import hcmut.group2.project.chatapp.usermanager.entities.keys.FriendshipId;
@@ -88,39 +89,39 @@ public class FriendshipService {
         return modelMapper.map(friendRepo.save(existingRequest), FriendshipDto.class);
     }
 
-    public List<PendingPhoneNumberDto> getAllPendingPhoneNumbers(String userPhoneNumber) throws UserNotFoundException {
+    public List<PendingFriendDto> getAllPendingPhoneNumbers(String userPhoneNumber) throws UserNotFoundException {
         ChatUser currentUser = userRepo.findByPhoneNumber(userPhoneNumber)
                             .orElseThrow(() -> new UserNotFoundException("User with Phone number " + userPhoneNumber + " not found."));
 
         List<Friendship> pendingFriendships = friendRepo.findAllByUserIdAndStatus(currentUser.getId(), FriendshipStatus.PENDING);
-        List<PendingPhoneNumberDto> pendingPhoneNumberDtos = Collections.emptyList();
+        List<PendingFriendDto> pendingFriendDtos = new ArrayList<>();
 
         for (Friendship friendship : pendingFriendships) {
-            if (friendship.getFriend().getPhoneNumber() == userPhoneNumber) {
-                pendingPhoneNumberDtos.add(modelMapper.map(friendship.getUser().getPhoneNumber(), PendingPhoneNumberDto.class));
+            if (friendship.getFriend().getPhoneNumber().equals(userPhoneNumber)) {
+                pendingFriendDtos.add(modelMapper.map(friendship.getUser(), PendingFriendDto.class));
             }
         }
 
-        return pendingPhoneNumberDtos;
+        return pendingFriendDtos;
     }
 
-    public List<FriendPhoneNumberDto> getAllFriendPhoneNumbers(String userPhoneNumber) throws UserNotFoundException {
+    public List<FriendDto> getAllFriendPhoneNumbers(String userPhoneNumber) throws UserNotFoundException {
         ChatUser currentUser = userRepo.findByPhoneNumber(userPhoneNumber)
                             .orElseThrow(() -> new UserNotFoundException("User with Phone number " + userPhoneNumber + " not found."));
 
         List<Friendship> acceptedFriendships = friendRepo.findAllByUserIdAndStatus(currentUser.getId(), FriendshipStatus.ACCEPTED);
-        List<FriendPhoneNumberDto> friendPhoneNumberDtos = Collections.emptyList();
+        List<FriendDto> FriendDtos = new ArrayList<>();
 
         for (Friendship friendship : acceptedFriendships) {
-            if (friendship.getUser().getPhoneNumber() == userPhoneNumber) {
-                friendPhoneNumberDtos.add(modelMapper.map(friendship.getFriend().getPhoneNumber(), FriendPhoneNumberDto.class));
+            if (friendship.getUser().getPhoneNumber().equals(userPhoneNumber)) {
+                FriendDtos.add(modelMapper.map(friendship.getFriend(), FriendDto.class));
             }
-            else if (friendship.getFriend().getPhoneNumber() == userPhoneNumber) {
-                friendPhoneNumberDtos.add(modelMapper.map(friendship.getUser().getPhoneNumber(), FriendPhoneNumberDto.class));
+            else if (friendship.getFriend().getPhoneNumber().equals(userPhoneNumber)) {
+                FriendDtos.add(modelMapper.map(friendship.getUser(), FriendDto.class));
             }
         }
 
-        return friendPhoneNumberDtos;
+        return FriendDtos;
     }
 
     // public List<FriendshipDto> getAllFriendshipsByUserId(Integer userId){

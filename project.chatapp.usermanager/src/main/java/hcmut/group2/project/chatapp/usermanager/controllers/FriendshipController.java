@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import hcmut.group2.project.chatapp.usermanager.dto.FriendPhoneNumberDto;
+import hcmut.group2.project.chatapp.usermanager.dto.FriendDto;
 import hcmut.group2.project.chatapp.usermanager.dto.FriendRequestDto;
 import hcmut.group2.project.chatapp.usermanager.dto.FriendRequestUpdateDto;
 import hcmut.group2.project.chatapp.usermanager.dto.FriendshipDto;
-import hcmut.group2.project.chatapp.usermanager.dto.PendingPhoneNumberDto;
+import hcmut.group2.project.chatapp.usermanager.dto.PendingFriendDto;
 import hcmut.group2.project.chatapp.usermanager.enums.FriendshipStatus;
 import hcmut.group2.project.chatapp.usermanager.services.FriendshipService;
 import jakarta.validation.Valid;
@@ -56,12 +56,12 @@ public class FriendshipController implements JWTAuthController {
     }
 
     @GetMapping("/pending/{currentUserPhoneNumber}")
-    public ResponseEntity<List<PendingPhoneNumberDto>> getAllPendingPhoneNumbers(@PathVariable String currentUserPhoneNumber) {
+    public ResponseEntity<List<PendingFriendDto>> getAllPendingPhoneNumbers(@PathVariable String currentUserPhoneNumber) {
         return ResponseEntity.ok(friendService.getAllPendingPhoneNumbers(currentUserPhoneNumber));
     }
 
     @GetMapping("/accepted/{currentUserPhoneNumber}")
-    public ResponseEntity<List<FriendPhoneNumberDto>> getAllFriendPhoneNumbers(@PathVariable String currentUserPhoneNumber) {
+    public ResponseEntity<List<FriendDto>> getAllFriendPhoneNumbers(@PathVariable String currentUserPhoneNumber) {
         return ResponseEntity.ok(friendService.getAllFriendPhoneNumbers(currentUserPhoneNumber));
     }
 
