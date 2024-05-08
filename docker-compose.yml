@@ -1,0 +1,38 @@
+version: '3'
+services:
+  service-discovery:
+    build: ./service-discovery
+    ports:
+    - "9000:9000"
+    volumes:
+    - /data/service-discovery
+    - "${HOME}/.m2:/data/.m2"
+  gateway:
+    build: ./api-gateway
+    ports:
+    - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+    - /data/api-gateway
+    - "${HOME}/.m2:/data/.m2"
+  message:
+    build: ./message-service
+    ports:
+    - "8081:8080"
+    env_file:
+      - .env
+    volumes:
+    - /data/message-service
+    - "${HOME}/.m2:/data/.m2"
+  user:
+    build: ./user-service
+    ports:
+    - "8082:8080"
+    env_file:
+      - .env
+    volumes:
+    - /data/user-service
+    - "${HOME}/.m2:/data/.m2"
+volumes:
+  logvolume01: {}

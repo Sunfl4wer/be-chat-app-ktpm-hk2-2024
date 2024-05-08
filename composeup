@@ -1,0 +1,10 @@
+#!/bin/bash
+
+image_ids=( $(docker images -q "be-chat-app-*") )
+
+for id in "${image_ids[@]}"
+do
+  docker rmi "$id"
+done
+
+docker compose up -d
